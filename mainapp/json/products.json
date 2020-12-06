@@ -1,0 +1,38 @@
+[
+  {
+    "category": "Дом",
+    "name": "комфорт-1",
+    "image": "products_images/product-1.jpg",
+    "short_desc": "стул для комфорта",
+    "description": "для дома",
+    "price": "2989.5",
+    "quantity": "17"
+  },
+  {
+    "category": "Офис",
+    "name": "стандарт",
+    "image": "products_images/product-4.jpg",
+    "short_desc": "стул для офиса",
+    "description": "для офиса",
+    "price": "1895.25",
+    "quantity": "27"
+  },
+  {
+    "category": "Модерн",
+    "name": "новинка",
+    "image": "products_images/product-6.jpg",
+    "short_desc": "новый дизайн",
+    "description": "для современного помещения",
+    "price": "5361.47",
+    "quantity": "27"
+  },
+  {
+    "category": "Классика",
+    "name": "рим",
+    "image": "products_images/product-10.jpg",
+    "short_desc": "в классическом дизайне",
+    "description": "привычное и удобное",
+    "price": "8357.77",
+    "quantity": "8"
+  }
+]

@@ -1,7 +1,7 @@
-from mainapp.models import ProductCategory, Product
-
 {% extends 'mainapp/base.html'%}
 {% load static %}
+from mainapp.models import ProductCategory, Product
+
 
 {% block menu %}
 <div class="slider">
@@ -27,28 +27,26 @@ from mainapp.models import ProductCategory, Product
 {{ user.first_name|title}} {{ user.last_name}}
 
 {% block content %}
-<div class="featured">
-    <div class="featured-menu">
-        <a class="active" href="#">Популярные</a><a href="#">Новинки</a>
-    </div>
-    <a class="explore" href="#">показать все <img src="{% static 'img/arrow.png' %}" alt=""></a>
-    <div class="clearfix">
-    </div>
-    <div class="tab-content">
-        {% for product in products %}
-            <div class="block">
-                <a href="#"><img src="/media/{{ product.image }}"
-                                                        alt="{{ product.alt }}">
-                    <div class="text">
-                        <img src="{% static 'img/icon-hover.png' %}" alt="{{ product.alt }}">
-                        <h4>{{ product.name }}</h4>
-                        <p>{{ product.short_desc }} </p>
-                    </div>
-                </a>
+    <div class="featured">
+        <div class="featured-menu"><a class="active" href="#">Популярные</a><a href="#">Новинки</a></div>
+        <a class="explore" href="#">показать все <img src="{% static 'img/arrow.png' %}" alt=""></a>
+        <div class="clearfix"></div>
+        <div class="tab-content">
+            {% for product in products %}
+                <div class="block">
+                    <a href="#"><img src="/media/{{ product.image }}" alt="{{ product.alt }}">
+                        <div class="text">
+                            <img src="{% static 'img/icon-hover.png' %}" alt="{{ product.alt }}">
+                            <h4>Название: {{ product.name }}</h4>
+                            <p>Короткое описание: {{ product.short_desc }} </p>
+                            <p>Цена: {{ product.price }} </p>
+                            <p>Наличие на складе: {{ product.quantity }} </p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
             </div>
-        {% endfor %}
         </div>
     </div>
-
-    <div class="clr"></div>>
+    <div class="clr"></div>
 {% endblock %}
