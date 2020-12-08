@@ -7,7 +7,7 @@
     {% for link in links_menu %}
         <li>
             <a href="{% url 'products:category' link.pk %}" {% if request.resolver_match.kwargs.pk|add:0 == link.pk %} class="active" {% endif %} >
-                {{ link.name }}
+                {{ link.name|capfirst }}
             </a>
         </li>
     {% endfor %}

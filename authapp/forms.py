@@ -14,7 +14,7 @@ class ShopUserLoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for filed_name, field in self.fields.items():  # !!!!!!!!!
+        for filed_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'  # для того чтобы через Бутрстрап строить страницу
 
 
