@@ -31,4 +31,4 @@ class Command(BaseCommand):
             product['category'] = _category
             Product.objects.create(**product)
 
-        ShopUser.objects.create_superuser('django', 'django@geekbrains.local', 'geekbrains', age = 33)
+        ShopUser.objects.create_superuser('django', 'django@geekbrains.local', 'geekbrains', age=33)
