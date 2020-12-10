@@ -18,6 +18,8 @@ def basket(request):
 
 @login_required
 def basket_add(request, pk):
+    # Предварительне условия - пользоватль не авторизован на сайте, и закоментировать две последующие строки кода
+    # Если зайти в продукты, выбрать категорию  и выбрать какой-нибудь товар, то  перенесет на страницу Аутентификации
     if 'login' in request.META.get('HTTP_REFERER'):
         return HttpResponseRedirect(reverse('products:product', args=[pk]))
     product = get_object_or_404(Product, pk=pk)
