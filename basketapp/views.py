@@ -11,7 +11,7 @@ def basket(request):
     title = 'корзина'
     basket_items = Basket.objects.filter(user=request.user).order_by('product__category')
     content = {'title': title, 'basket_items': basket_items}
-    return render(request, 'basket.html', content)
+    return render(request, 'basketapp/basket.html', content)
 
 
 @login_required
