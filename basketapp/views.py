@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.template.loader import render_to_string
-from django.urls import reverse
+# from django.urls import reverse
 
 from basketapp.models import Basket
 from mainapp.models import Product
@@ -20,8 +20,8 @@ def basket(request):
 def basket_add(request, pk):
     # Предварительне условия - пользоватль не авторизован на сайте, и закоментировать две последующие строки кода
     # Если зайти в продукты, выбрать категорию  и выбрать какой-нибудь товар, то  перенесет на страницу Аутентификации
-    if 'login' in request.META.get('HTTP_REFERER'):
-        return HttpResponseRedirect(reverse('products:product', args=[pk]))
+    # if 'login' in request.META.get('HTTP_REFERER'):
+    #     return HttpResponseRedirect(reverse('products:product', args=[pk]))
     product = get_object_or_404(Product, pk=pk)
     basket = Basket.objects.filter(user=request.user, product=product).first()
 
@@ -36,9 +36,27 @@ def basket_add(request, pk):
 
 @login_required
 def basket_remove(request, pk):
-    basket_item = get_object_or_404(Basket, pk=pk)
-    basket_item.delete()
+    basket_record = get_object_or_404(Basket, pk=pk)
+    basket_record.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def basket_remove_ajax(request, pk):
+    #  Пример дефекта для кнопки "УДАЛИТЬ" в корзине, когда кнопка отрабатывает только 1 раз. Чтбы сработало второй
+    #  раз, то надо обновлять страницу. Использовать совместно с изменениями в файле basket_scripts.js
+    if request.is_ajax():
+        basket_for_delete = Basket.objects.get(pk=pk)
+        basket_for_delete.delete()
+
+        basket_items = Basket.objects.filter(user=request.user).order_by('product__category')
+
+        content = {
+            'basket_items': basket_items
+        }
+
+        result = render_to_string('basketapp/includes/inc_basket_list.html', content)
+        return JsonResponse({'result': result})
 
 
 @login_required

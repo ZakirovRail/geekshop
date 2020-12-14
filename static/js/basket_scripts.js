@@ -39,8 +39,61 @@ window.onload = function () {
                 },
             });
         }
-        // event.preventDefault();
+        event.preventDefault();
+        // return;
+    });
+
+    $('.basket_list').on('click', '.button-remove', function (){
+        let pk = $(this).attr('data-pk');
+        if(pk){
+            $.ajax({
+                url: "/basket/remove/ajax" + pk + "/",
+
+                success: function (data){
+                    $('.basket_list').html(data.result);
+                    console.log('this delete function works once only. It is a bug');
+                }
+            });
+        }
         return;
     });
 
 };
+
+/*
+    // Пример дефекта для кнопки "УДАЛИТЬ" в корзине, когда кнопка отрабатывает только 1 раз. Чтбы сработало второй
+    // раз, то надо обновлять страницу
+
+ */
+//     $('.button-remove').on(types: 'click', selector: function(){
+//         let pk = $(this).attr(name:'data-pk');
+//         if(pk){
+//             $.ajax(url:{
+//                 url: "/basket/remove/ajax" + pk + "/",
+//
+//                 success: function (data) {
+//                     $('.basket_list').html(data.result);
+//                 }
+//             });
+//         }
+//         return;
+//     });
+//
+// };
+
+//     $('.button-remove').on('click', function (){
+//         let pk = $(this).attr('data-pk');
+//         if(pk){
+//             $.ajax({
+//                 url: "/basket/remove/ajax" + pk + "/",
+//
+//                 success: function (data) {
+//                     $('.basket_list').html(data.result);
+//                     console.log('this delete function works once only. It is a bug');
+//                 }
+//             });
+//         }
+//         return;
+//     });
+//
+// };
