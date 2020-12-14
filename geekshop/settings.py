@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'authapp',
-    'basketapp'
+    'basketapp',
 ]
 
 MIDDLEWARE = [
@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'authapp.ShopUser'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
