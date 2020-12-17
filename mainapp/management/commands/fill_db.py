@@ -32,3 +32,4 @@ class Command(BaseCommand):
             Product.objects.create(**product)
 
         ShopUser.objects.create_superuser('django', 'django@geekbrains.local', 'geekbrains', age=33)
+        # создать второго супер юзера для тестирования
