@@ -1,5 +1,6 @@
 import random
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 
@@ -38,28 +39,37 @@ def main(request):
     return render(request, 'mainapp/index.html', content)
 
 
-
-def products(request, pk=None):
+def products(request, pk=None, page=1):
     # print(pk)
     title = 'продукты'
     links_menu = ProductCategory.objects.all()
+    basket = get_basket(request.user)
 
     if pk is not None:
         if pk == 0:
-            products_list = Product.objects.all()
             category = {'name': 'все', 'pk': 0}
+            products = Product.objects.all().order_by('price')
+
         else:
             # category = ProductCategory.objects.get(pk=pk)
             category = get_object_or_404(ProductCategory,
                                          pk=pk)  # return 404 error in case required category is not found
-            products_list = Product.objects.filter(category__pk=pk)
+            products = Product.objects.filter(category__pk=pk).order_by('price')
+
+        paginator = Paginator(products, 3)  # отображение количества товаров на странице - поиграть со значениями
+        try:
+            product_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            product_paginator = paginator.page(1)
+        except EmptyPage:
+            product_paginator = paginator.page(paginator.num_pages) # return last page to a user
 
         content = {
             'title': title,
             'links_menu': links_menu,
-            'products': products_list,
+            'products': product_paginator,
             'category': category,
-            'basket': get_basket(request.user)
+            'basket': basket
         }
 
         return render(request, 'mainapp/products_list.html', content)
