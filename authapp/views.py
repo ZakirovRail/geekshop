@@ -21,6 +21,9 @@ def verify(request, email, activation_key):
     try:
         user = ShopUser.objects.get(email=email)
         if user.activation_key == activation_key and not user.is_activation_key_expired():
+            print(user.activation_key)
+            user.activation_key = ''  # если закоментировать эту строку, то пользователь повторно может перейти
+            # на страницу подтверждения по ссылке
             user.is_active = True
             user.save()
             auth.login(request, user)

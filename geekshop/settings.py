@@ -142,8 +142,16 @@ DOMAIN_NAME = 'http://localhost:8000'
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '25'
-# EMAIL_HOST_USER = 'django@geekbrains.local'
-# EMAIL_HOST_PASSWORD = 'geekshop'
+EMAIL_HOST_USER = 'django@geekbrains.local'
+EMAIL_HOST_PASSWORD = 'geekshop'
 EMAIL_USE_SSL = False
 
-EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+
+#  Команда запуска почтового сервера, но EMAIL_BACKEND и EMAIL_FILE_PATH должны быть закоментирвоаны, а
+# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD - раскоментирована строка
+#  $ sudo python3 -m smtpd -n -c DebuggingServer localhost:25
+# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/emails/'  # здесь будут складываться сообщения со ссылкой на активацию пользователя
