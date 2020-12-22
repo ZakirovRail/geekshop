@@ -6,7 +6,7 @@
     <div class="new_category_form">
         <form action="" class="form_horizontal" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ update_form.as_p }}
+            {{ form.as_p }}
             <input type="submit" class="form-control" value="сохранить">
         </form>
         <button class="btn btn_round form_control last">
