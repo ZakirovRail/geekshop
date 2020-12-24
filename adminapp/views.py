@@ -341,6 +341,22 @@ def product_update(request, pk):
     return render(request, 'adminapp/product_update.html', content)
 
 
+# Раскоментировать когда в случае необходимсти переделать всю логику для обновления информации
+# по товару - url, template, view
+# class ProductUpdateView(UpdateView):
+#     model = Product
+#     form_class = ProductEditForm
+#
+#     def get_success_url(self):
+#         pk = self.kwargs['pk']
+#         product_item = Product.objects.get(pk=pk)
+#         return reverse('adminapp:products', args=[product_item.category__pk])
+#
+#     @method_decorator(user_passes_test(lambda u: u.is_superuser))
+#     def dispatch(self, *args, **kwargs):
+#         return super().dispatch(*args, **kwargs)
+
+
 # @user_passes_test(lambda u: u.is_superuser)
 # def product_delete(request, pk):
 #     title = 'продукт/удаление'
@@ -357,6 +373,7 @@ def product_update(request, pk):
 #         'product_to_delete': product
 #     }
 #     return render(request, 'adminapp/product_delete.html', content)
+
 
 class ProductDeleteView(DeleteView):
     model = Product
