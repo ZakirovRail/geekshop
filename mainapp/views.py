@@ -12,15 +12,16 @@ import datetime
 import os
 
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    else:
-        return []
+# def get_basket(user):
+#     if user.is_authenticated:
+#         return Basket.objects.filter(user=user)
+#     else:
+#         return []
 
 
 def get_hot_product():
     product_list = Product.objects.all()
+    # product_list = Product.objects.filter(is_active=True, category__is_active=True)  # добавить в требование, будет дефект
     return random.sample(list(product_list), 1)[0]
 
 
@@ -34,8 +35,7 @@ def main(request):
     products = Product.objects.all()
     content = {
         'title': title,
-        'products': products,
-        'basket': get_basket(request.user)}
+        'products': products}
     return render(request, 'mainapp/index.html', content)
 
 
@@ -43,7 +43,7 @@ def products(request, pk=None, page=1):
     # print(pk)
     title = 'продукты'
     links_menu = ProductCategory.objects.all()
-    basket = get_basket(request.user)
+    # basket = get_basket(request.user)
 
     if pk is not None:
         if pk == 0:
@@ -69,7 +69,7 @@ def products(request, pk=None, page=1):
             'links_menu': links_menu,
             'products': product_paginator,
             'category': category,
-            'basket': basket
+            # 'basket': basket
         }
 
         return render(request, 'mainapp/products_list.html', content)
@@ -80,7 +80,7 @@ def products(request, pk=None, page=1):
         'title': title,
         'links_menu': links_menu,
         'same_products': same_products,
-        'basket': get_basket(request.user),
+        # 'basket': get_basket(request.user),
         'hot_product': hot_product,
     }
     return render(request, 'mainapp/products.html', content)
@@ -91,7 +91,7 @@ def product(request, pk):
     content = {
         'title': title,
         'links_menu': ProductCategory.objects.all(),
-        'basket': get_basket(request.user),
+        # 'basket': get_basket(request.user),
         'product': get_object_or_404(Product, pk=pk)
     }
     return render(request, 'mainapp/product.html', content)
@@ -108,7 +108,7 @@ def contacts(request):
         'title': title,
         'visit_date': visit_date,
         'locations': locations,
-        'basket': get_basket(request.user)
+        # 'basket': get_basket(request.user)
     }
 
     return render(request, 'mainapp/contacts.html', content)

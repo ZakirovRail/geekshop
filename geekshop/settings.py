@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.basket',
             ],
         },
     },
@@ -136,3 +137,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = 'authapp.ShopUser'
 
 LOGIN_URL = '/auth/login/'
+
+
+DOMAIN_NAME = 'http://localhost:8000'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'django@geekbrains.local'
+EMAIL_HOST_PASSWORD = 'geekshop'
+EMAIL_USE_SSL = False
+
+
+#  Команда запуска почтового сервера,
+#  $ sudo python3 -m smtpd -n -c DebuggingServer localhost:25
+#  но EMAIL_BACKEND и EMAIL_FILE_PATH должны быть закоментирвоаны, а EMAIL_HOST_USER, EMAIL_HOST_PASSWORD - раскоментирована строка
+
+# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/emails/'  # здесь будут складываться сообщения со ссылкой на активацию пользователя
