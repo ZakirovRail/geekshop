@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'mainapp',
     'authapp',
     'basketapp',
-    'adminapp'
+    'adminapp',
+    'django.contrib.sites',
+    'ordersapp',
 ]
 
 MIDDLEWARE = [
@@ -167,19 +169,22 @@ EMAIL_FILE_PATH = 'tmp/emails/'  # здесь будут складыватьс�
 # Раздел подключения авторизации через социальные сети
 # 1.Сделать задание проверки правильности сохранения данных после авторизации через соц.сеть
 # 2. Задание на проверку правильности сохранения данных при создании новой категории или нового товара/////
-AUTHENTICATION_BACKEND = (
+AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'social_core.backends.vk.VKOAuth2'
+    'social_core.backends.vk.VKOAuth2',
 )
 # Django Optimisation Lesson 2 - сделать когда будет доступен ВК аккаунт
-with open('geekshop/vk.json', 'r') as f:
-    VK = json.load(f)
+
+with open('geekshop/vk.json', 'r') as file:
+    VK = json.load(file)
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = VK['SOCIAL_AUTH_VK_OAUTH2_KEY']
 SOCIAL_AUTH_VK_OAUTH2_SECRET = VK['SOCIAL_AUTH_VK_OAUTH2_SECRET']
 
 SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'   # CHECK LATTER, PROBABLY TO DELETE!!!!!!!!!!!
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
