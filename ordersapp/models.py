@@ -26,12 +26,12 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='дата создания заказа')
     updated = models.DateTimeField(auto_now=True, verbose_name='дата обновления заказа')
 
-    def _get_total_quantity(self):
+    def get_total_quantity(self):
         _items = self.orderitems.select_related()
         _totalquantity = sum(list(map(lambda x: x.quantity, _items)))
         return _totalquantity
 
-    def _get_total_cost(self):
+    def get_total_cost(self):
         _items = self.orderitems.select_related()
         _totalcost = sum(list(map(lambda x: x.product_cost, _items)))
         return _totalcost
@@ -43,5 +43,5 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=0, verbose_name='количество')
 
     @property
-    def get_product_cost(self):
+    def product_cost(self):
         return self.product.price * self.quantity
