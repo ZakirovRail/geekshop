@@ -28,7 +28,8 @@ DEBUG = True
 # DEBUG = False
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1']
+# ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -171,7 +172,7 @@ EMAIL_FILE_PATH = 'tmp/emails/'  # здесь будут складыватьс�
 # 2. Задание на проверку правильности сохранения данных при создании новой категории или нового товара/////
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.vk.VKOAuth2'
 )
 # Django Optimisation Lesson 2 - сделать когда будет доступен ВК аккаунт
 
