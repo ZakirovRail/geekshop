@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-
 from mainapp.models import Product
 
 
@@ -36,6 +35,14 @@ class Order(models.Model):
         _totalcost = sum(list(map(lambda x: x.product_cost, _items)))
         return _totalcost
 
+    def delete(self):
+        for item in self.orderitems.select_related():
+            item.product.quantity += item.quantity
+            item.product.save()
+
+        self.is_active = False
+        self.save()
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='заказ', related_name='orderitems')
@@ -45,3 +52,7 @@ class OrderItem(models.Model):
     @property
     def product_cost(self):
         return self.product.price * self.quantity
+
+    @staticmethod
+    def get_items(pk):
+        return OrderItem.objects.get(pk=pk)

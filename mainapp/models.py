@@ -17,7 +17,7 @@ class Product(models.Model):
     short_desc = models.CharField(max_length=120, verbose_name='краткое описание', )
     description = models.TextField(verbose_name='описание', blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name='цена', )
-    quantity = models.PositiveSmallIntegerField(default=0, verbose_name='количество на скалде')
+    quantity = models.PositiveSmallIntegerField(default=0, verbose_name='количество на складе')
     is_active = models.BooleanField(default=True, verbose_name='продукт активен')
 
     def __str__(self):

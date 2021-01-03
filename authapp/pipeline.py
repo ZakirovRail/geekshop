@@ -50,6 +50,9 @@ def save_user_profile(backend, user, response, *args, **kwargs):
         if data['photo_400_orig']:
             urllib.request.urlretrieve(
                 data['photo_400_orig'],
+                # 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png'
+                # it can be set as a default by mistake - make an issue for it, but comment below line data['photo_400_orig']
+
                 os.path.join(settings.MEDIA_ROOT, 'users_avatars', f'{user.pk}.jpg'))
         user.avatar = os.path.join('users_avatars', f'{user.pk}.jpg')
     user.save()
