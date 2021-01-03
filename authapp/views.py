@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import auth
 from django.core.mail import send_mail
+from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -74,6 +75,7 @@ def register(request):
     return render(request, 'authapp/register.html', content)
 
 
+@transaction.atomic
 def edit(request):
     title_edit = 'Изменение данных'
     if request.method == 'POST':
@@ -99,7 +101,7 @@ def verify(request, email, activation_key):
             # на страницу подтверждения по ссылке
             user.is_active = True
             user.save()
-            auth.login(request, user)
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return render(request, 'authapp/verification.html')
     except Exeption as e:
         print('error')
