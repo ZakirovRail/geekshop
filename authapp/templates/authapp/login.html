@@ -13,6 +13,18 @@
         <input class="form-control" type="submit" value="войти">
     </form>
     <button class="btn btn-round form-control">
+        <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/" class="">
+            Вход через Google аккаунт
+        </a>
+    </button>
+    <button class="btn btn-round form-control">
+        <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/" class="">
+<!--        create an issue here-->
+<!--        <a href="#" class="">-->
+            Вход через ВК
+        </a>
+    </button>
+    <button class="btn btn-round form-control">
         <a href="{% url 'auth:register' %}" class="">
             зарегистрироваться
         </a>

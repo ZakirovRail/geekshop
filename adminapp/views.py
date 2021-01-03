@@ -260,7 +260,7 @@ class ProductDetailView(DetailView):
 
 class ProductCreateView(CreateView):
     model = Product
-    template_name = 'adminapp/product_update.html'
+    template_name = 'adminapp/product_create.html'
     form_class = ProductEditForm
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))

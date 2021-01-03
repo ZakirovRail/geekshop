@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 # from django.forms import forms
 # from django.contrib.auth import forms
 
-from authapp.models import ShopUser
+from authapp.models import ShopUser, ShopUserProfile
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -48,7 +48,6 @@ class ShopUserRegisterForm(UserCreationForm):
         return user
 
 
-
 class ShopUserEditForm(UserChangeForm):
     class Meta:
         model = ShopUser
@@ -70,3 +69,15 @@ class ShopUserEditForm(UserChangeForm):
 
     def clean_email(self):
         pass
+
+
+class ShopUserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = ShopUserProfile
+        fields = ('tagline', 'about_me', 'gender', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''
