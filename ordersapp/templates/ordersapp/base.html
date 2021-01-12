@@ -1,5 +1,9 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
+
+<!--Это страница детализации заказа-->
+<!--Упс, ошибка создать отчет о дефекте-->
+
 <html>
 <head>
   <meta charset="utf-8">
@@ -16,6 +20,7 @@
    {% block js %}
        <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
        <script src="{% static 'js/orders_scripts.js' %}"></script>
+       <script src="{% static 'js/jquery.formset.js' %}"></script>
    {% endblock %}
 </head>
 <body>
@@ -23,6 +28,9 @@
        {% block content %}
 
        {% endblock %}
+
+<!--      Здесь добавить в требования (неочевидно), что должна быть доступна возможность добавлять товар-->
+<!--      в детализацию товара. Хотя реализовано через "добавить продукт" кнопку, но это не прописывать в требованиях-->
 
   </div>
 </body>
