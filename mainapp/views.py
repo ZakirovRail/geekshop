@@ -32,7 +32,10 @@ def get_same_products(hot_product):
 def main(request):
     title = 'главная'
     # products = Product.objects.all()[:4]
-    products = Product.objects.all()
+    # products = Product.objects.all()
+    products = Product.objects.filter(is_active=True, category__is_active=True)
+    #    uncomment to improve performance - reduce number of requests to DB
+    # products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')[:3]
     content = {
         'title': title,
         'products': products}

@@ -7,8 +7,8 @@
         <input type="number" name="{{ item.pk }}" min="0" value="{{ item.quantity }}">
         <span class="product_cost">{{ item.product_cost }}&nbsp;руб</span>
         <button class="btn btn-round button-remove" data-pk="{{ item.pk }}">
-            <a href="#" class="">
-<!--{#            <a href="{% url 'basket:remove' item.pk %}" class="">#}-->
+<!--            <a href="#" class="">-->
+{#            <a href="{% url 'basket:remove' item.pk %}" class="">#}
                 удалить
             </a>
         </button>
