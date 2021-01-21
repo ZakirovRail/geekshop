@@ -28,4 +28,4 @@ class OrderItemForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
             field.help_text = ''
         #    uncomment to improve performance - reduce number of requests to DB
-        # self.fields['product'].queryset = Product.get_items().select_related()
+        self.fields['product'].queryset = Product.get_items().select_related()
