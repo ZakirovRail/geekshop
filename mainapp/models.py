@@ -6,6 +6,9 @@ class ProductCategory(models.Model):
     description = models.TextField(verbose_name='описание')
     is_active = models.BooleanField(default=True, verbose_name='активна')
 
+    #    uncomment to improve performance - to index requests to DB
+    # is_active = models.BooleanField(default=True, verbose_name='активна', db_index=True)
+
     def __str__(self):
         return self.name
 
@@ -19,6 +22,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name='цена', )
     quantity = models.PositiveSmallIntegerField(default=0, verbose_name='количество на складе')
     is_active = models.BooleanField(default=True, verbose_name='продукт активен')
+    #    uncomment to improve performance - to index requests to DB
+    # is_active = models.BooleanField(default=True, verbose_name='продукт активен', db_index=True)
 
     def __str__(self):
         return f'{self.name} ({self.category.name})'
