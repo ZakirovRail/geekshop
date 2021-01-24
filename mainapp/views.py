@@ -1,15 +1,14 @@
-import random
+import random, datetime, os, json
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
-from django.conf import settings
-
-from basketapp.models import Basket
 from mainapp.models import ProductCategory, Product
+from django.core.cache import cache
+from django.conf import settings
+from django.views.decorators.cache import cache_page, never_cache
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from basketapp.models import Basket
 
-import json
-import datetime
-import os
+JSON_PATH = 'mainapp/json'
 
 
 # def get_basket(user):
@@ -17,6 +16,48 @@ import os
 #         return Basket.objects.filter(user=user)
 #     else:
 #         return []
+
+
+def get_links_menu():
+    if settings.LOW_CACHE:
+        key = 'links_menu'
+        links_menu = cache.get(key)
+        if links_menu is None:
+            links_menu = ProductCategory.objects.filter(is_active=True)
+            cache.set(key, links_menu)
+        return links_menu
+    else:
+        return ProductCategory.objects.filter(is_active=True)
+
+
+def get_category(pk):
+    if settings.LOW_CACHE:
+        key = f'category_{pk}'
+        category = cache.get(key)
+        if category is None:
+            category = get_object_or_404(ProductCategory, pk=pk)
+            cache.set(key, category)
+        # return category
+    else:
+        return get_object_or_404(ProductCategory, pk=pk)
+
+
+@never_cache  # exclude from caching, when the whole site is cached
+def get_products():
+    if settings.LOW_CACHE:
+        key = 'products'
+        products = cache.get(key)
+    if products is None:
+        products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')
+        cache.set(key, products)
+        return products
+    else:
+        return Product.objects.filter(is_active=True, category__is_active=True).select_related('category')
+
+
+def load_from_json(file_name):
+    with open(os.path.join(JSON_PATH, file_name + '.json'), 'r', errors='ignore') as infile:
+        return json.load(infile)
 
 
 def get_hot_product():
@@ -42,10 +83,11 @@ def main(request):
     return render(request, 'mainapp/index.html', content)
 
 
+@cache_page(3600)
 def products(request, pk=None, page=1):
     # print(pk)
     title = 'продукты'
-    links_menu = ProductCategory.objects.all()
+    links_menu = get_links_menu()
     # basket = get_basket(request.user)
 
     if pk is not None:
@@ -55,17 +97,16 @@ def products(request, pk=None, page=1):
 
         else:
             # category = ProductCategory.objects.get(pk=pk)
-            category = get_object_or_404(ProductCategory,
-                                         pk=pk)  # return 404 error in case required category is not found
+            category = get_category(pk=pk)
             products = Product.objects.filter(category__pk=pk).order_by('price')
 
-        paginator = Paginator(products, 3)  # отображение количества товаров на странице - поиграть со значениями
+        paginator = Paginator(products, 5)  # отображение количества товаров на странице - поиграть со значениями+requir
         try:
             product_paginator = paginator.page(page)
         except PageNotAnInteger:
             product_paginator = paginator.page(1)
         except EmptyPage:
-            product_paginator = paginator.page(paginator.num_pages) # return last page to a user
+            product_paginator = paginator.page(paginator.num_pages)  # return last page to a user
 
         content = {
             'title': title,
@@ -126,7 +167,7 @@ def products_all(request):
         {'href': 'products_classic', 'name': 'классика'},
     ]
     content = {
-        'title': 'Продукты',
+        'title': 'Все продукты',
         'links_menu': links_menu,
     }
     return render(request, 'mainapp/products.html', content)
@@ -141,7 +182,7 @@ def products_home(request):
         {'href': 'products_classic', 'name': 'классика'},
     ]
     content = {
-        'title': 'Продукты',
+        'title': 'Дом',
         'links_menu': links_menu,
     }
     return render(request, 'mainapp/products.html', content)
@@ -156,7 +197,7 @@ def products_office(request):
         {'href': 'products_classic', 'name': 'классика'},
     ]
     content = {
-        'title': 'Продукты',
+        'title': 'Офис',
         'links_menu': links_menu,
     }
     return render(request, 'mainapp/products.html', content)
@@ -171,7 +212,7 @@ def products_modern(request):
         {'href': 'products_classic', 'name': 'классика'},
     ]
     content = {
-        'title': 'Продукты',
+        'title': 'Модерн',
         'links_menu': links_menu,
     }
     return render(request, 'mainapp/products.html', content)
@@ -186,7 +227,7 @@ def products_classic(request):
         {'href': 'products_classic', 'name': 'классика'},
     ]
     content = {
-        'title': 'Продукты',
+        'title': 'Класика',
         'links_menu': links_menu,
     }
     return render(request, 'mainapp/products.html', content)

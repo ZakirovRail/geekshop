@@ -72,8 +72,8 @@ class OrderUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=4)  # extra is a parametr for
-        # an empty rows in the during creating a new order http://127.0.0.1:8000/order/create/
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=2)  # extra is a parametr for
+        # an empty rows in the during creating a new order http://127.0.0.1:8000/order/create/ or /edit/
         if self.request.POST:
             formset = OrderFormSet(self.request.POST, instance=self.object)
             # for form in formset.form:
@@ -127,7 +127,8 @@ def order_forming_complete(request, pk):
 def product_quantity_update_save(sender, update_fields, instance, **kwargs):
     if update_fields is 'quantity' or 'product':
         if instance.pk:
-            instance.product.quantity -= instance.quantity - sender.get_items(instance.pk).quantity
+            instance.product.quantity -= instance.quantity - sender.get_items(instance.pk).quantity # THERE IS AN ERROR!
+            # WHEN I TRY TO ADD A SECOND entity of a good, appears an error "GET /basket/add/2/ HTTP/1.1" 500 102874
         else:
             instance.product.quantity -= instance.quantity
         instance.product.save()
