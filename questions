@@ -15,3 +15,6 @@
 
 Как пофиксить, то выскакивает ошибка при попытке повторно добавить этот товар?
 
+Ошибка при запуске тестов:
+django.urls.exceptions.NoReverseMatch: 'djdt' is not a registered namespace
+Гуглеж показалч то в settings проблемы, но пересмотрел ошибок нет

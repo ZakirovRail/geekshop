@@ -1,5 +1,6 @@
 import random, datetime, os, json
 
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from mainapp.models import ProductCategory, Product
 from django.core.cache import cache
@@ -98,9 +99,11 @@ def products(request, pk=None, page=1):
         else:
             # category = ProductCategory.objects.get(pk=pk)
             category = get_category(pk=pk)
-            products = Product.objects.filter(category__pk=pk).order_by('price')
+            # products = Product.objects.filter(category__pk=pk).order_by('price')
+            products = Product.objects.filter(Q(category__pk=1) | Q(category__pk=2))
 
-        paginator = Paginator(products, 5)  # отображение количества товаров на странице - поиграть со значениями+requir
+        paginator = Paginator(products, 5)
+        # отображение количества товаров на странице - поиграть со значениями+requir
         try:
             product_paginator = paginator.page(page)
         except PageNotAnInteger:
