@@ -23,7 +23,7 @@ class TestMainappSmoke(TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get('/contact/')
+        response = self.client.get('/contacts/')
         self.assertEqual(response.status_code, 200)
 
         response = self.client.get('/products/')
@@ -34,7 +34,7 @@ class TestMainappSmoke(TestCase):
             response = self.client.get(f'/products/category/{category.pk}')
             self.assertEqual(response.status_code, 200)
 
-        for category in Product.objects.all():
+        for product in Product.objects.all():
             response = self.client.get(f'/products/product/{product.pk}')
             self.assertEqual(response.status_code, 200)
 

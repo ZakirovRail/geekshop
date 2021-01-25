@@ -7,7 +7,6 @@ from django.core.cache import cache
 from django.conf import settings
 from django.views.decorators.cache import cache_page, never_cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from basketapp.models import Basket
 
 JSON_PATH = 'mainapp/json'
 
