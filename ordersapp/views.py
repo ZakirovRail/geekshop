@@ -127,8 +127,7 @@ def order_forming_complete(request, pk):
 def product_quantity_update_save(sender, update_fields, instance, **kwargs):
     if update_fields is 'quantity' or 'product':
         if instance.pk:
-            instance.product.quantity -= instance.quantity - sender.get_items(instance.pk).quantity  # THERE IS AN ERROR!
-            # WHEN I TRY TO ADD A SECOND entity of a good, appears an error "GET /basket/add/2/ HTTP/1.1" 500 102874
+            instance.product.quantity -= instance.quantity - sender.get_item(instance.pk).quantity
         else:
             instance.product.quantity -= instance.quantity
         instance.product.save()
