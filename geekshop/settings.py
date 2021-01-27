@@ -27,9 +27,9 @@ SECRET_KEY = '4vd_dn-j%*5ku=93__l#g7f$mp42qn!(p66($4=x09wo_c-f*0'
 DEBUG = True
 # DEBUG = False
 
-# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []
 # ALLOWED_HOSTS = ['127.0.0.1']
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -53,6 +53,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -152,6 +154,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 120
+CACHE_MIDDLEWARE_KEY_PREFIX = 'geekshop'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211'
+    }
+}
+
+LOW_CACHE = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -171,11 +185,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = (
-#     BASE_DIR / "static",
-# )
+STATICFILES_DIRS = (
+    BASE_DIR / "static",
+)
 # STATICFILES_ROOT = os.path.join(BASE_DIR / "static",)
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 MEDIA_URL = '/media/'
