@@ -27,7 +27,7 @@ class Basket(models.Model):
     def product_cost(self):
         return self.product.price * self.quantity
 
-    product_cost = property(product_cost)
+    product_cost =   property(product_cost)
 
     @cached_property
     def get_items_cached(self):
@@ -73,4 +73,5 @@ class Basket(models.Model):
 
     @staticmethod
     def get_item(pk):
-        return OrderItem.objects.get(pk=pk)
+        return Basket.objects.get(pk=pk)
+        # return OrderItem.objects.get(pk=pk)
