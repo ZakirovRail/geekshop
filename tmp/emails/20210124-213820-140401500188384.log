@@ -1,0 +1,13 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: 
+ =?utf-8?b?0J/QvtC00YLQstC10YDQttC00LXQvdC40LUg0YPRh9C10YLQvdC+0Lkg0LfQsNC/?=
+ =?utf-8?b?0LjRgdC4?=
+From: django@geekbrains.local
+To: test12@gb.com
+Date: Sun, 24 Jan 2021 21:38:20 -0000
+Message-ID: <161152430056.33194.9583020429787936069@server-station.home>
+
+http://localhost:8000/auth/verify/test12@gb.com/a161468798059127af57a99d3dc0b1ab43afe3fd/
+-------------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -10,6 +11,10 @@ from authapp.forms import ShopUserRegisterForm
 from authapp.models import ShopUser
 
 from mainapp.models import ProductCategory, Product
+
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
+from django.db import connection
 
 
 # users
@@ -161,11 +166,19 @@ def categories(request):
 #     }
 #     return render(request, 'adminapp/category_update.html', content)
 
+
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}:')
+    [print(query['sql']) for query in update_queries]
+
+
 class ProductCategoryUpdateView(UpdateView):
     model = ProductCategory
     template_name = 'adminapp/category_update.html'
     success_url = reverse_lazy('adminapp:categories')
     form_class = ProductCategoryEditForm
+
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, *args, **kwargs):
@@ -176,8 +189,21 @@ class ProductCategoryUpdateView(UpdateView):
         context['title'] = 'категория/Обновить'
         return context
 
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                # print(f'Применяется скидка {discount}% к товарам категории {self.object_name}')
+                # на текущий момент, если указывать размер скидки в % на странице редактирования катеогрий
+                # http://127.0.0.1:8000/admin/categories/update/1 ,
+                # то применяется скидка ко всем товарам так, что получается новая цена, т.е. цена режется
+                # и размер скидки не сохраняется на странице редактирования категории товаров
+                self.object.product_set.update(price=F('price') * (1-discount/100))  # !!! ERROR description below
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
+        return super().form_valid(form)
 
-# @user_passes_test(lambda u: u.is_superuser)
+
+# @user_passes_test(l ambda u: u.is_superuser)
 # def category_delete(request, pk):
 #     title = 'категории/удаление'
 #

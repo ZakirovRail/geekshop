@@ -1,12 +1,12 @@
 import random, datetime, os, json
 
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from mainapp.models import ProductCategory, Product
 from django.core.cache import cache
 from django.conf import settings
 from django.views.decorators.cache import cache_page, never_cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from basketapp.models import Basket
 
 JSON_PATH = 'mainapp/json'
 
@@ -37,7 +37,7 @@ def get_category(pk):
         if category is None:
             category = get_object_or_404(ProductCategory, pk=pk)
             cache.set(key, category)
-        # return category
+        return category
     else:
         return get_object_or_404(ProductCategory, pk=pk)
 
@@ -55,14 +55,39 @@ def get_products():
         return Product.objects.filter(is_active=True, category__is_active=True).select_related('category')
 
 
+def get_products_ordered_by_price():
+    if settings.LOW_CACHE:
+        key = 'products_ordered_by_price'
+        products = cache.get(key)
+        if products is None:
+            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
+            cache.set(key, products)
+        return products
+    else:
+        return Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
+
+
+def get_products_in_category_ordered_by_price(pk):
+    if settings.LOW_CACHE:
+        key = f'products_in_category_ordered_by_price_{pk}'
+        products = cache.get(key)
+        if products is None:
+            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by(
+                'price')
+            cache.set(key, products)
+        return products
+    else:
+        return Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by('price')
+
+
 def load_from_json(file_name):
     with open(os.path.join(JSON_PATH, file_name + '.json'), 'r', errors='ignore') as infile:
         return json.load(infile)
 
 
 def get_hot_product():
-    product_list = Product.objects.all()
-    # product_list = Product.objects.filter(is_active=True, category__is_active=True)  # добавить в требование, будет дефект
+    # product_list = Product.objects.all()
+    product_list = Product.objects.filter(is_active=True, category__is_active=True)  # добавить в требование, будет дефект
     return random.sample(list(product_list), 1)[0]
 
 
@@ -83,7 +108,7 @@ def main(request):
     return render(request, 'mainapp/index.html', content)
 
 
-@cache_page(3600)
+# @cache_page(3600)  # uncomment in case I need to cache the products page
 def products(request, pk=None, page=1):
     # print(pk)
     title = 'продукты'
@@ -97,14 +122,16 @@ def products(request, pk=None, page=1):
 
         else:
             # category = ProductCategory.objects.get(pk=pk)
-            category = get_category(pk=pk)
-            products = Product.objects.filter(category__pk=pk).order_by('price')
+            category = get_category(pk)
+            # products = Product.objects.filter(category__pk=pk).order_by('price')
+            products = Product.objects.filter(Q(category__pk=1) | Q(category__pk=2))
 
-        paginator = Paginator(products, 5)  # отображение количества товаров на странице - поиграть со значениями+requir
+        paginator = Paginator(products, 2)
+        # отображение количества товаров на странице - поиграть со значениями+requir
         try:
             product_paginator = paginator.page(page)
         except PageNotAnInteger:
-            product_paginator = paginator.page(1)
+            product_paginator = paginator.page(1)  # Если польз ввел некоректный номер страницы, вывод первой стр
         except EmptyPage:
             product_paginator = paginator.page(paginator.num_pages)  # return last page to a user
 
@@ -144,7 +171,7 @@ def product(request, pk):
 def contacts(request):
     title = 'о нас'
     visit_date = datetime.datetime.now()
-    # locations = []
+    locations = []
     file_path = os.path.join(settings.BASE_DIR, 'contacts.json')
     with open(file_path) as file_contacts:
         locations = json.load(file_contacts)
@@ -152,9 +179,7 @@ def contacts(request):
         'title': title,
         'visit_date': visit_date,
         'locations': locations,
-        # 'basket': get_basket(request.user)
     }
-
     return render(request, 'mainapp/contacts.html', content)
 
 
