@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.template.loader import render_to_string
-# from django.urls import reverse
 
 from basketapp.models import Basket
 from mainapp.models import Product
@@ -18,8 +17,6 @@ def basket(request):
 
 @login_required
 def basket_add(request, pk):
-    # Предварительне условия - пользоватль не авторизован на сайте, и закоментировать две последующие строки кода
-    # Если зайти в продукты, выбрать категорию  и выбрать какой-нибудь товар, то  перенесет на страницу Аутентификации
     # if 'login' in request.META.get('HTTP_REFERER'):
     #     return HttpResponseRedirect(reverse('products:product', args=[pk]))
     product = get_object_or_404(Product, pk=pk)
@@ -43,8 +40,6 @@ def basket_remove(request, pk):
 
 @login_required
 def basket_remove_ajax(request, pk):
-    #  Пример дефекта для кнопки "УДАЛИТЬ" в корзине, когда кнопка отрабатывает только 1 раз. Чтбы сработало второй
-    #  раз, то надо обновлять страницу. Использовать совместно с изменениями в файле basket_scripts.js
     if request.is_ajax():
         basket_for_delete = Basket.objects.get(pk=pk)
         basket_for_delete.delete()
