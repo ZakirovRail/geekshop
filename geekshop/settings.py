@@ -14,11 +14,8 @@ from pathlib import Path
 import json
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '4vd_dn-j%*5ku=93__l#g7f$mp42qn!(p66($4=x09wo_c-f*0'
@@ -31,7 +28,6 @@ ALLOWED_HOSTS = []
 # ALLOWED_HOSTS = ['127.0.0.1']
 # ALLOWED_HOSTS = ['*']
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -220,14 +216,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = 'tmp/emails/'  # здесь будут складываться сообщения со ссылкой на активацию пользователя
 
 
-# Раздел подключения авторизации через социальные сети
-# 1.Сделать задание проверки правильности сохранения данных после авторизации через соц.сеть
-# 2. Задание на проверку правильности сохранения данных при создании новой категории или нового товара/////
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.vk.VKOAuth2'
 )
-# Django Optimisation Lesson 2 - сделать когда будет доступен ВК аккаунт
 
 with open('geekshop/vk.json', 'r') as file:
     VK = json.load(file)
