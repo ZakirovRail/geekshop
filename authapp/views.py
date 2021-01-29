@@ -10,22 +10,6 @@ from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditF
 from authapp.models import ShopUser
 
 
-# def send_verify_mail(user):
-#     verify_link = reverse(
-#         'auth:verify',
-#         args=[user.email, user.activation_key])
-#
-#     title = f'Подтверждение учетной записи'
-#     message = f'Для подтверждения учетной записи {user.username}\
-#               на портале {settings.DOMAIN_NAME} перейдите по ссылке \
-#               \n{settings.DOMAIN_NAME}{verify_link}'
-#
-#     print(f'from: {settings.EMAIL_HOST_USER}, to {user.email}')
-#     return send_mail(
-#         title,
-#         message,
-#     )
-
 def send_verify_email(user):
     verify_link = reverse('auth:verify', args=[user.email, user.activation_key])
     subject = 'Подтверждение учетной записи'
@@ -97,8 +81,7 @@ def verify(request, email, activation_key):
         user = ShopUser.objects.get(email=email)
         if user.activation_key == activation_key and not user.is_activation_key_expired():
             print(user.activation_key)
-            user.activation_key = ''  # если закоментировать эту строку, то пользователь повторно может перейти
-            # на страницу подтверждения по ссылке
+            user.activation_key = ''
             user.is_active = True
             user.save()
             auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
