@@ -28,8 +28,7 @@ class OrderCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=4)  # extra is a parametr for
-        # an empty rows in the during creating a new order http://127.0.0.1:8000/order/create/
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=4)
         if self.request.POST:
             formset = OrderFormSet(self.request.POST)
         else:
@@ -72,12 +71,9 @@ class OrderUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=2)  # extra is a parametr for
-        # an empty rows in the during creating a new order http://127.0.0.1:8000/order/create/ or /edit/
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=2)
         if self.request.POST:
             formset = OrderFormSet(self.request.POST, instance=self.object)
-            # for form in formset.form:
-            #     form.initial['price'] = form.instance.product.price
             data['orderitems'] = formset
         else:
             formset = OrderFormSet(instance=self.object)
