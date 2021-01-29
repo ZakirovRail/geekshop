@@ -1,21 +1,19 @@
-import random, datetime, os, json
+import random
+import datetime
+import os
+import json
 
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
-from mainapp.models import ProductCategory, Product
+
 from django.core.cache import cache
 from django.conf import settings
 from django.views.decorators.cache import cache_page, never_cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
+from mainapp.models import ProductCategory, Product
+
 JSON_PATH = 'mainapp/json'
-
-
-# def get_basket(user):
-#     if user.is_authenticated:
-#         return Basket.objects.filter(user=user)
-#     else:
-#         return []
 
 
 def get_links_menu():
@@ -42,7 +40,7 @@ def get_category(pk):
         return get_object_or_404(ProductCategory, pk=pk)
 
 
-@never_cache  # exclude from caching, when the whole site is cached
+@never_cache
 def get_products():
     if settings.LOW_CACHE:
         key = 'products'
@@ -99,10 +97,6 @@ def get_same_products(hot_product):
 
 def main(request):
     title = 'главная'
-    # products = Product.objects.all()[:4]
-    # products = Product.objects.all()
-    # products = Product.objects.filter(is_active=True, category__is_active=True)
-    #    uncomment to improve performance - reduce number of requests to DB
     products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')[:3]
     content = {
         'title': title,
@@ -112,10 +106,8 @@ def main(request):
 
 # @cache_page(3600)  # uncomment in case I need to cache the products page
 def products(request, pk=None, page=1):
-    # print(pk)
     title = 'продукты'
     links_menu = get_links_menu()
-    # basket = get_basket(request.user)
 
     if pk is not None:
         if pk == 0:
@@ -123,13 +115,10 @@ def products(request, pk=None, page=1):
             products = Product.objects.all().order_by('price')
 
         else:
-            # category = ProductCategory.objects.get(pk=pk)
             category = get_category(pk)
-            # products = Product.objects.filter(category__pk=pk).order_by('price')
             products = Product.objects.filter(Q(category__pk=1) | Q(category__pk=2))
 
-        paginator = Paginator(products, 2)
-        # отображение количества товаров на странице - поиграть со значениями+requir
+        paginator = Paginator(products, 2)  # отображение количества товаров на странице
         try:
             product_paginator = paginator.page(page)
         except PageNotAnInteger:
@@ -164,7 +153,6 @@ def product(request, pk):
     content = {
         'title': title,
         'links_menu': ProductCategory.objects.all(),
-        # 'basket': get_basket(request.user),
         'product': get_object_or_404(Product, pk=pk)
     }
     return render(request, 'mainapp/product.html', content)
