@@ -86,8 +86,10 @@ def load_from_json(file_name):
 
 
 def get_hot_product():
-    # product_list = Product.objects.all()
-    product_list = Product.objects.filter(is_active=True, category__is_active=True)  # добавить в требование, будет дефект
+    product_list = Product.objects.all()
+    # product_list = Product.objects.filter(is_active=True, category__is_active=True)  # если много категорий, то
+    # при открытии раздела Продукты появляется ошибк аraise ValueError("Sample larger than population or is negative")
+    # ValueError: Sample larger than population or is negative
     return random.sample(list(product_list), 1)[0]
 
 
